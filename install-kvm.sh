@@ -29,12 +29,10 @@ info "Mise a jour du systeme..."
 sudo apt update && sudo apt upgrade -y
 
 info "Detection du paquet QEMU adapte..."
-if apt-cache policy qemu-kvm 2>/dev/null | grep -q "Candidate: (none)"; then
-  QEMU_PKG="qemu-system-x86"
-  info "qemu-kvm non disponible, utilisation de qemu-system-x86"
-else
+if apt-cache show qemu-kvm 2>/dev/null | grep -q "^Version:"; then
   QEMU_PKG="qemu-kvm"
-  info "qemu-kvm disponible, utilisation de qemu-kvm"
+else
+  QEMU_PKG="qemu-system-x86"
 fi
 
 PACKAGES="$QEMU_PKG qemu-utils libvirt-daemon-system libvirt-clients virt-manager virtinst virt-viewer dnsmasq-base bridge-utils ovmf cpu-checker"
